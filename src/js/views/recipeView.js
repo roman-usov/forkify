@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved,class-methods-use-this,no-underscore-dangle */
-import { Fraction } from 'fractional';
 import icons from 'url:../../img/icons.svg'; // Parcel 2
 import ParentView from './parentView';
 
@@ -53,9 +52,7 @@ class ViewRecipe extends ParentView {
           <use href="${icons}#icon-check"></use>
         </svg>
         <div class="recipe__quantity">${
-          ingredient.quantity
-            ? new Fraction(ingredient.quantity).toString()
-            : ''
+          ingredient.quantity ? ingredient.quantity : ''
         }</div>
         <div class="recipe__description">
           <span class="recipe__unit">${
