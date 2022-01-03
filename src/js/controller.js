@@ -1,174 +1,150 @@
-import * as model from './model.js';
-import recipeView from './views/recipeView.js';
+import * as model from './model';
+import recipeView from './views/recipeView';
+import searchBarView from './views/searchBarView';
+import searchResultsView from './views/searchResultsView';
+import paginationView from './views/paginationView';
+import bookmarksView from './views/bookmarksView';
+import addRecipeView from './views/addRecipeView';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-const recipeContainer = document.querySelector('.recipe');
+// Remove after completing the project
+// if (module.hot) {
+//   module.hot.accept();
+// }
 
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
-
-// https://forkify-api.herokuapp.com/v2
-
-///////////////////////////////////////
-
-const controlRecipes = async function() {
+const controlRecipes = async function () {
   try {
+    // Get recipe id from the browser url line
     const recipeId = window.location.hash.slice(1);
-    if(!recipeId) return;
+
+    // Do nothing if there's no recipe id available in the browser url line
+    if (!recipeId) return;
+
+    // Update results view to mark selected recipe from Search Results
+    searchResultsView.update(model.getSearchResultsPage());
+
+    // Update bookmarks in the View
+    bookmarksView.update(model.state.bookmarks);
+
+    // Show the spinner while a recipe is being fetched
     recipeView.renderSpinner();
+
+    // Fetch a recipe by recipe id
     await model.loadRecipe(recipeId);
+
+    // Render fetched recipe
     recipeView.render(model.state.recipe);
-  } catch(err) {
-    //alert(`Something went wrong: ${err.message}`);
-    console.log(`Something went wrong ${err.message}. Try again!`);
-    // throw new Error(`Something went wrong ${err.message}`);
+  } catch (error) {
+    recipeView.renderError();
   }
 };
 
-controlRecipes();
-
-// fetch('https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886')
-
-['hashchange', 'load'].forEach(ev => window.addEventListener(ev, controlRecipes));
-
-/*
-window.addEventListener('hashchange', showRecipe);
-window.addEventListener('load', showRecipe);*/
-
-//////////// Drafts
-
-/*const renderError = function (msg) {
-  countriesContainer.insertAdjacentText('beforeend', msg);
-  countriesContainer.style.opacity = '1';
-};
-
-const handleGeoApiError = function (data) {
-  if (data.error.code !== '018')
-    throw new Error(`${data.error.code} ${data.error.message}`);
-  if (data.error.code === '018')
-    throw new Error(`${data.error.code} ${data.error.description}`);
-};
-
-function handleCountryApiError(responseData) {
-  if (responseData.status === 404)
-    throw new Error(`${responseData.status} Country not found`);
-  if (/^4([0-3]|[5-9]){2}/g.test(responseData.status))
-    throw new Error(
-      `${responseData.status} Handling Error: ${responseData.message}`
-    );
-}
-
-const getJSON = function (url, errorMsg) {
-  return fetch(url).then(response => {
-    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
-    return response.json();
-  });
-};
-
-const getCountryData = function (country) {
-  getJSON(`https://restcountries.com/v2/name/${country}`)
-    .then(data => {
-      console.log(data);
-      if (data.status) handleCountryApiError(data);
-      renderCountry(data[0]);
-      const neighbor = data[0].borders ? data[0].borders[0] : null;
-      //const neighbor = 'edssgdsgdtr';
-      if (!neighbor) throw new Error('No neighbor found');
-      return getJSON(`https://restcountries.com/v2/alpha/${neighbor}`);
-    })
-    .then(data => {
-      console.log(data);
-      //if (data === undefined) return;
-      if (data.status) handleCountryApiError(data);
-      renderCountry(data, 'neighbour');
-    })
-    .catch(err => {
-      renderError(`Something went wrong 💥💥 ${err.message}. Try again!`);
-    })
-    .finally(() => (countriesContainer.style.opacity = '1'));
-};
-
-const renderCountry = function (data, className = '') {
-  const html = `
-    <article class="country ${className}">
-            <img class="country__img" src="${data.flag}" alt=""/>
-            <div class="country__data">
-              <h3 class="country__name">${data.name}</h3>
-              <h4 class="country__region">${data.region}</h4>
-              <p class="country__row"><span>👫</span>${(
-    +data.population / 1000000
-  ).toFixed(1)}</p>
-              <p class="country__row"><span>🗣️</span>${
-    data.languages[0].name
-  }</p>
-              <p class="country__row"><span>💰</span>${
-    data.currencies[0].code
-  }</p>
-            </div>
-    </article>
-  `;
-  countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = '1';
-};
-
-const getPosition = function () {
-  return new Promise((resolve, reject) => {
-    // navigator.geolocation.getCurrentPosition(
-    //   position => resolve(position),
-    //   err => reject(err)
-    // );
-    navigator.geolocation.getCurrentPosition(resolve, reject);
-  });
-};
-
-const whereAmI = async function () {
+const controlSearchResults = async function () {
   try {
-    const geolocation = await getPosition();
-    const { latitude: lat, longitude: lng } = geolocation.coords;
-    const geocodeResponse = await fetch(
-      `https://geocode.xyz/${lat},${lng}?json=1`
-    );
-    //const geocodeResponse = await fetch(`https://geocode.xyz/${0},${1}?json=1`);
-    console.log(geocodeResponse);
-    const geocodeResponseBody = await geocodeResponse.json();
-    if (geocodeResponseBody.error) handleGeoApiError(geocodeResponseBody);
-    if (!geocodeResponseBody.country || !geocodeResponseBody.city)
-      throw new Error('Your request did not produce any results');
-    const countriesResponse = await fetch(
-      `https://restcountries.com/v2/name/${geocodeResponseBody.country}`
-    );
-    const countriesResponseBody = await countriesResponse.json();
-    if (countriesResponseBody.status)
-      handleCountryApiError(countriesResponseBody);
-    renderCountry(countriesResponseBody[0]);
-    return `You are in ${geocodeResponseBody.city}, ${geocodeResponseBody.country}`;
-  } catch (err) {
-    console.log(err);
-    renderError(`Something went wrong 💥💥 ${err.message}. Try again!`);
-    throw new Error(`Something went wrong 💥💥 ${err.message}. Try again!`);
+    // get a user's query from the search bar
+    const query = searchBarView.getQuery();
+
+    // Do nothing if the search bar is empty
+    if (!query) return;
+
+    searchResultsView.renderSpinner();
+
+    // Fetch search results based on a user's input
+    await model.loadSearchResults(query);
+
+    // Render search results
+    searchResultsView.render(model.getSearchResultsPage());
+
+    // Render the initial pagination
+    paginationView.render(model.state.search);
+  } catch (error) {
+    searchResultsView.renderError();
   }
-};*/
+};
 
+// eslint-disable-next-line max-len
+// A handler function that provides search results for the needed page via Model, displays search results and pagination via Pagination View
+const controlPagination = function (page) {
+  searchResultsView.render(model.getSearchResultsPage(page));
+  paginationView.render(model.state.search);
+};
 
-/*const renderIngredients = function(ingredients) {
-  return ingredients.map(ingredient => {
-   return  `
-    <li class="recipe__ingredient">
-      <svg class="recipe__icon">
-        <use href="${icons}#icon-check"></use>
-      </svg>
-      <div class="recipe__quantity">${ingredient.quantity}</div>
-      <div class="recipe__description">
-        <span class="recipe__unit">${ingredient.unit}</span>
-        ${ingredient.description}
-      </div>
-    </li>
-   `;
-  }).join('');
-};*/
+// eslint-disable-next-line max-len
+// A handler function that calculates ingredient amounts for updated servings and renders an updated Recipe in the UI
+const controlServings = function (newServings) {
+  model.updateServings(newServings);
+  recipeView.update(model.state.recipe);
+};
+
+const controlBookmark = function () {
+  if (!model.state.recipe.bookmarked) {
+    model.addBookmark(model.state.recipe);
+  } else {
+    model.removeBookmark(model.state.recipe.id);
+  }
+
+  recipeView.update(model.state.recipe);
+
+  bookmarksView.render(model.state.bookmarks);
+};
+
+const controlBookmarks = function () {
+  bookmarksView.render(model.state.bookmarks);
+};
+
+const controlAddRecipe = async function (newRecipe) {
+  try {
+    // Show the spinner while waiting for the recipe to upload
+    addRecipeView.renderSpinner();
+
+    await model.uploadRecipe(newRecipe);
+
+    recipeView.render(model.state.recipe);
+
+    // Display a success message after uploading a user recipe
+    addRecipeView.renderMessage();
+
+    // Render bookmarks list
+    bookmarksView.render(model.state.bookmarks);
+
+    // Add the hash of the new recipe to the url
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
+    // eslint-disable-next-line max-len
+    // Close the Modal Window with the success message and restore the recipe form to its initial state
+    addRecipeView.closeAddRecipeForm();
+
+    // setTimeout(() => {
+    //   addRecipeView.toggleModal();
+    // }, CLOSE_WINDOW_DELAY * 1000);
+  } catch (error) {
+    addRecipeView.renderError(error.message);
+  }
+};
+
+const init = function () {
+  // Add an event listener for rendering bookmarks upon loading the page
+  bookmarksView.addHandlerRenderBookmarksOnLoad(controlBookmarks);
+
+  // Add event handlers for hashchange and load events
+  recipeView.addHandlerForRender(controlRecipes);
+
+  // Add an event handler for increasing or decreasing the number of servings
+  recipeView.addHandlerForServings(controlServings);
+
+  // Add an event listener for adding and removing bookmarks
+  recipeView.addHandlerForBookmark(controlBookmark);
+
+  // Add an event handler for the submit search query button
+  searchBarView.addHandlerForSearch(controlSearchResults);
+
+  // eslint-disable-next-line max-len
+  // Add an event listener for the pagination element to listen for future pagination button clicks via event propagation
+  paginationView.addHandlerForPagination(controlPagination);
+
+  // Add an event listener for receiving user recipe data
+  addRecipeView.addHandlerUploadBtn(controlAddRecipe);
+};
+
+init();

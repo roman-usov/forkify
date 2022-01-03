@@ -36,7 +36,7 @@
 
         <nav class="nav">
           <ul class="nav__list">
-            <li class="nav__item">
+            <li class="nav__item nav__add--bookmark">
               <button class="nav__btn nav__btn--add-recipe">
                 <svg class="nav__icon">
                   <use href="src/img/icons.svg#icon-edit"></use>
@@ -44,7 +44,7 @@
                 <span>Add recipe</span>
               </button>
             </li>
-            <li class="nav__item">
+            <li class="nav__item nav__bookmarks">
               <button class="nav__btn nav__btn--bookmarks">
                 <svg class="nav__icon">
                   <use href="src/img/icons.svg#icon-bookmark"></use>
@@ -86,8 +86,6 @@
 
       <div class="search-results">
         <ul class="results">
-          <a href="#5ed6604591c37cdc054bcd09">RECIPE 1</a>
-          <a href="#5ed6604591c37cdc054bcb37">RECIPE 2</a>
           <!--
           <li class="preview">
             <a class="preview__link preview__link--active" href="#23456">
@@ -267,15 +265,15 @@
           <label>Title</label>
           <input value="TEST" required name="title" type="text" />
           <label>URL</label>
-          <input value="TEST" required name="sourceUrl" type="text" />
+          <input value="https://gfreefoodie.com/gluten-free-lasagna-sheets-or-cut-pasta-gluten-free-pasta-recipe/" required name="sourceUrl" type="text" />
           <label>Image URL</label>
-          <input value="TEST" required name="image" type="text" />
+          <input value="https://images.unsplash.com/photo-1619895092538-128341789043?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80" required name="image" type="text" />
           <label>Publisher</label>
           <input value="TEST" required name="publisher" type="text" />
           <label>Prep time</label>
           <input value="23" required name="cookingTime" type="number" />
           <label>Servings</label>
-          <input value="23" required name="servings" type="number" />
+          <input value="4" required name="servings" type="number" />
         </div>
 
         <div class="upload__column">
