@@ -1,6 +1,9 @@
 /* eslint-disable no-useless-catch */
 //  import ShortUniqueId from 'short-unique-id';
 // eslint-disable-next-line no-unused-vars
+import { Fraction } from 'fractional';
+// eslint-disable-next-line no-unused-vars
+import { async } from 'regenerator-runtime';
 import { RECIPES_API_URL, RESULTS_PER_PAGE, STEP, API_KEY } from './config';
 import { AJAXcall, round } from './helpers';
 
