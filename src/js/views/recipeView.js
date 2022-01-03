@@ -13,9 +13,9 @@ class ViewRecipe extends ParentView {
   _message = 'Start by searching for a recipe or an ingredient. Have fun!';
 
   // A private helper method to convert a float number into a fraction for display in the DOM
-  _toFraction(num) {
-    return num ? new Fraction(num).toString() : '';
-  }
+  // _toFraction(num) {
+  //   return num ? new Fraction(num).toString() : '';
+  // }
 
   //  Publisher method for a recipe render subscriber function
   addHandlerForRender(handler) {
@@ -58,7 +58,9 @@ class ViewRecipe extends ParentView {
           <use href="${icons}#icon-check"></use>
         </svg>
         <div class="recipe__quantity">${
-          ingredient.quantity ? this._toFraction(ingredient.quantity) : ''
+          ingredient.quantity
+            ? new Fraction(ingredient.quantity).toString()
+            : ''
         }</div>
         <div class="recipe__description">
           <span class="recipe__unit">${
