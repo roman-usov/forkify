@@ -58,9 +58,7 @@ class ViewRecipe extends ParentView {
           <use href="${icons}#icon-check"></use>
         </svg>
         <div class="recipe__quantity">${
-          ingredient.quantity
-            ? new Fraction(ingredient.quantity).toString()
-            : ''
+          ingredient.quantity ? ingredient.quantity : ''
         }</div>
         <div class="recipe__description">
           <span class="recipe__unit">${
