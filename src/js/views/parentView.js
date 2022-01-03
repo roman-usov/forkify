@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved,no-underscore-dangle,class-methods-use-this */
-import { Fraction } from 'fractional';
 import icons from 'url:../../img/icons.svg'; // Parcel 2
 
 export default class ParentView {
@@ -9,11 +8,6 @@ export default class ParentView {
   // A private helper method to clear the parent element
   _clear() {
     this._parentEl.innerHTML = '';
-  }
-
-  // A private helper method to convert a float number into a fraction for display in the DOM
-  _toFraction(num) {
-    return num ? new Fraction(num).toString() : '';
   }
 
   // A public method to render an HTML element based on provided input

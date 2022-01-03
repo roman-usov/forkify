@@ -1,4 +1,5 @@
 /* eslint-disable import/no-unresolved,class-methods-use-this,no-underscore-dangle */
+import { Fraction } from 'fractional';
 import icons from 'url:../../img/icons.svg'; // Parcel 2
 import ParentView from './parentView';
 
@@ -10,6 +11,11 @@ class ViewRecipe extends ParentView {
   _errorMessage = "Specified recipe doesn't exist. Please, try another one.";
 
   _message = 'Start by searching for a recipe or an ingredient. Have fun!';
+
+  // A private helper method to convert a float number into a fraction for display in the DOM
+  _toFraction(num) {
+    return num ? new Fraction(num).toString() : '';
+  }
 
   //  Publisher method for a recipe render subscriber function
   addHandlerForRender(handler) {
