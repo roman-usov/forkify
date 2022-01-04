@@ -19,6 +19,13 @@ class PaginationView extends ParentView {
     const { results, page, resultsPerPage } = this.data;
     const totalPages = Math.ceil(results.length / resultsPerPage);
 
+    // TODO
+    // Case 0 - no search results
+    if (totalPages === 0) {
+      this.clear();
+      return '';
+    }
+
     // Case 1 - we just have 1 page to display, no other pages
     if (totalPages === 1) return '';
 

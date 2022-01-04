@@ -6,7 +6,7 @@ export const state = {
   search: {
     query: '',
     results: [],
-    page: 1,
+    //  page: 1,
     resultsPerPage: RESULTS_PER_PAGE,
   },
   bookmarks: [],
@@ -55,6 +55,7 @@ export const loadSearchResults = async function (query) {
     ...(recipe.key && { key: recipe.key }),
   }));
   state.search.page = 1;
+  console.log('state search results', state.search.results);
 };
 
 export const getSearchResultsPage = function (page = state.search.page) {
@@ -92,6 +93,10 @@ export const addBookmark = function (recipe) {
   state.bookmarks.push(recipe);
 
   // Mark current recipe as bookmarked
+  console.log(
+    'check if recipe id = state.recipe.id',
+    recipe.id === state.recipe.id
+  );
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
 
   persistBookmarks();

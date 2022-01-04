@@ -5,6 +5,9 @@ import ParentView from './parentView';
 export default class PreviewView extends ParentView {
   static generatePreviewMarkup(recipeData) {
     const id = window.location.hash.slice(1);
+    console.log('id', id);
+    console.log('recipe id', recipeData.id);
+    console.log('id = recipe id', id === recipeData.id);
 
     return `
       <li class="preview">

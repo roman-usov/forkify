@@ -106,14 +106,15 @@ const controlAddRecipe = async function (newRecipe) {
 
     recipeView.render(model.state.recipe);
 
+    // TODO
+    // Add the hash of the new recipe to the url
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
     // Display a success message after uploading a user recipe
     addRecipeView.renderMessage();
 
     // Render bookmarks list
     bookmarksView.render(model.state.bookmarks);
-
-    // Add the hash of the new recipe to the url
-    window.history.pushState(null, '', `#${model.state.recipe.id}`);
 
     // Close the Modal Window with the success message and restore the recipe form to its initial state
     addRecipeView.closeAddRecipeForm();

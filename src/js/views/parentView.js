@@ -25,12 +25,12 @@ export default class ParentView {
     this.parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
+  // TODO
   render(data) {
-    this.data = data;
-
-    if (!data || (Array.isArray(data) && data.length === 0)) {
+    if (!data || data.length === 0) {
       this.renderError();
     } else {
+      this.data = data;
       this.displayInDOM(this.generateMarkup());
     }
   }
