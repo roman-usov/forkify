@@ -1,4 +1,4 @@
-/* eslint-disable import/no-unresolved,no-underscore-dangle,class-methods-use-this */
+// eslint-disable-next-line import/no-unresolved
 import icons from 'url:../../img/icons.svg'; // Parcel 2
 
 export default class ParentView {

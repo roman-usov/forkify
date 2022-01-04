@@ -10,34 +10,30 @@ const timeout = function (s) {
 
 const AJAXcall = async function (uri, payload = null) {
   // eslint-disable-next-line no-useless-catch
-  try {
-    const fetchPromise = payload
-      ? fetch(uri, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        })
-      : fetch(uri);
+  const fetchPromise = payload
+    ? fetch(uri, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+    : fetch(uri);
 
-    const response = await Promise.race([fetchPromise, timeout(TIMEOUT_SEC)]);
+  const response = await Promise.race([fetchPromise, timeout(TIMEOUT_SEC)]);
 
-    const data = await response.json();
+  const data = await response.json();
 
-    if (!response.ok) {
-      const newError = new Error(`${response.status} ${data.message}`);
-      newError.response = {
-        status: response.status,
-        body: data,
-      };
-      throw newError;
-    }
-
-    return data;
-  } catch (err) {
-    throw err;
+  if (!response.ok) {
+    const newError = new Error(`${response.status} ${data.message}`);
+    newError.response = {
+      status: response.status,
+      body: data,
+    };
+    throw newError;
   }
+
+  return data;
 };
 
 const errorMessage = function (error) {

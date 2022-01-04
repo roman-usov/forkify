@@ -1,6 +1,3 @@
-/* eslint-disable no-useless-catch */
-//  import ShortUniqueId from 'short-unique-id';
-// eslint-disable-next-line no-unused-vars
 import { RECIPES_API_URL, RESULTS_PER_PAGE, STEP, API_KEY } from './config';
 import { AJAXcall, round } from './helpers';
 
@@ -32,42 +29,32 @@ const createRecipeObject = function (data) {
 
 // A function to get a recipe by its id
 export const loadRecipe = async function (id) {
-  // eslint-disable-next-line no-useless-catch
-  try {
-    const data = await AJAXcall(`${RECIPES_API_URL}${id}?key=${API_KEY}`);
+  const data = await AJAXcall(`${RECIPES_API_URL}${id}?key=${API_KEY}`);
 
-    state.recipe = createRecipeObject(data);
+  state.recipe = createRecipeObject(data);
 
-    if (state.bookmarks.some(bookmark => bookmark.id === state.recipe.id)) {
-      state.recipe.bookmarked = true;
-    } else {
-      state.recipe.bookmarked = false;
-    }
-  } catch (err) {
-    throw err;
+  if (state.bookmarks.some(bookmark => bookmark.id === state.recipe.id)) {
+    state.recipe.bookmarked = true;
+  } else {
+    state.recipe.bookmarked = false;
   }
 };
 
 // A function to get an array of recipes based on a user's query
 export const loadSearchResults = async function (query) {
-  // eslint-disable-next-line no-useless-catch
-  try {
-    state.search.query = query;
-    const data = await AJAXcall(
-      `${RECIPES_API_URL}?search=${query}&key=${API_KEY}`
-    );
-    const { recipes } = data.data;
-    state.search.results = recipes.map(recipe => ({
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      image: recipe.image_url,
-      ...(recipe.key && { key: recipe.key }),
-    }));
-    state.search.page = 1;
-  } catch (err) {
-    throw err;
-  }
+  state.search.query = query;
+  const data = await AJAXcall(
+    `${RECIPES_API_URL}?search=${query}&key=${API_KEY}`
+  );
+  const { recipes } = data.data;
+  state.search.results = recipes.map(recipe => ({
+    id: recipe.id,
+    title: recipe.title,
+    publisher: recipe.publisher,
+    image: recipe.image_url,
+    ...(recipe.key && { key: recipe.key }),
+  }));
+  state.search.page = 1;
 };
 
 export const getSearchResultsPage = function (page = state.search.page) {
@@ -134,59 +121,49 @@ const init = function () {
 
 init();
 
-// Helper function to generate a recipe Id
-/* const uid = new ShortUniqueId({
-  length: 24,
-  dictionary: 'alphanum_lower',
-}); */
-
 // Upload a user recipe
 export const uploadRecipe = async function (userRecipe) {
-  try {
-    const ingredients = Object.entries(userRecipe)
-      .filter(entry => entry[0].startsWith('ingredient') && entry[1])
-      .map(entry => entry[1])
-      .map(entry => {
-        const ingredientArr = entry
-          .trim()
-          .replace(/\s{2,}/g, '')
-          .split(',');
+  const ingredients = Object.entries(userRecipe)
+    .filter(entry => entry[0].startsWith('ingredient') && entry[1])
+    .map(entry => entry[1])
+    .map(entry => {
+      const ingredientArr = entry
+        .trim()
+        .replace(/\s{2,}/g, '')
+        .split(',');
 
-        if (ingredientArr.length !== 3 || !ingredientArr[2])
-          throw new Error(
-            'Wrong ingredient format. Please, use the following format: quantity,unit,description :)'
-          );
+      if (ingredientArr.length !== 3 || !ingredientArr[2])
+        throw new Error(
+          'Wrong ingredient format. Please, use the following format: quantity,unit,description :)'
+        );
 
-        const [quantity, unit, description] = ingredientArr;
+      const [quantity, unit, description] = ingredientArr;
 
-        const ingredient = {
-          quantity: quantity ? +quantity : null,
-          unit: unit || null,
-          description,
-        };
+      const ingredient = {
+        quantity: quantity ? +quantity : null,
+        unit: unit || null,
+        description,
+      };
 
-        return ingredient;
-      });
+      return ingredient;
+    });
 
-    const recipeForUpload = {
-      title: userRecipe.title,
-      publisher: userRecipe.publisher,
-      source_url: userRecipe.sourceUrl,
-      image_url: userRecipe.image,
-      ingredients,
-      servings: +userRecipe.servings,
-      cooking_time: +userRecipe.cookingTime,
-    };
+  const recipeForUpload = {
+    title: userRecipe.title,
+    publisher: userRecipe.publisher,
+    source_url: userRecipe.sourceUrl,
+    image_url: userRecipe.image,
+    ingredients,
+    servings: +userRecipe.servings,
+    cooking_time: +userRecipe.cookingTime,
+  };
 
-    const data = await AJAXcall(
-      `${RECIPES_API_URL}?key=${API_KEY}`,
-      recipeForUpload
-    );
+  const data = await AJAXcall(
+    `${RECIPES_API_URL}?key=${API_KEY}`,
+    recipeForUpload
+  );
 
-    state.recipe = createRecipeObject(data);
+  state.recipe = createRecipeObject(data);
 
-    addBookmark(state.recipe);
-  } catch (error) {
-    throw error;
-  }
+  addBookmark(state.recipe);
 };
