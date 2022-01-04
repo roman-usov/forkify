@@ -1,5 +1,5 @@
 import * as model from './model';
-import recipeView from './views/recipeView';
+import ViewRecipe from './views/recipeView';
 import searchBarView from './views/searchBarView';
 import searchResultsView from './views/searchResultsView';
 import paginationView from './views/paginationView';
@@ -12,6 +12,9 @@ import 'regenerator-runtime/runtime';
 // if (module.hot) {
 //   module.hot.accept();
 // }
+
+//  Instantiate an object out of the imported ViewRecipe class
+const recipeView = new ViewRecipe();
 
 const controlRecipes = async function () {
   try {
@@ -128,7 +131,7 @@ const init = function () {
   bookmarksView.addHandlerRenderBookmarksOnLoad(controlBookmarks);
 
   // Add event handlers for hashchange and load events
-  recipeView.addHandlerForRender(controlRecipes);
+  ViewRecipe.addHandlerForRender(controlRecipes);
 
   // Add an event handler for increasing or decreasing the number of servings
   recipeView.addHandlerForServings(controlServings);

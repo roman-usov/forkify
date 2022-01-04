@@ -3,11 +3,11 @@ import icons from 'url:../../img/icons.svg'; // Parcel 2
 
 export default class ParentView {
   // An attribute to hold input passed into the render() public method for rendering an HTML element
-  _data;
+  data;
 
   // A private helper method to clear the parent element
-  _clear() {
-    this._parentEl.innerHTML = '';
+  clear() {
+    this.parentEl.innerHTML = '';
   }
 
   // A public method to render an HTML element based on provided input
@@ -24,26 +24,26 @@ export default class ParentView {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
 
-    this._data = data;
+    this.data = data;
 
-    const markup = this._generateMarkup();
+    const markup = this.generateMarkup();
 
     if (!render) return markup;
 
-    this._clear();
+    this.clear();
 
-    this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    this.parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
   // A public method to update an HTML element based on provided input
   update(data) {
-    this._data = data;
+    this.data = data;
 
-    const newMarkup = this._generateMarkup();
+    const newMarkup = this.generateMarkup();
     const newDOM = document.createRange().createContextualFragment(newMarkup);
     const newElements = Array.from(newDOM.querySelectorAll('*'));
 
-    const currentElements = Array.from(this._parentEl.querySelectorAll('*'));
+    const currentElements = Array.from(this.parentEl.querySelectorAll('*'));
 
     newElements.forEach((newElement, i) => {
       const currentElement = currentElements[i];
@@ -75,11 +75,11 @@ export default class ParentView {
     </div>
   `;
 
-    this._clear();
-    this._parentEl.insertAdjacentHTML('afterbegin', spinnerHtml);
+    this.clear();
+    this.parentEl.insertAdjacentHTML('afterbegin', spinnerHtml);
   }
 
-  renderError(message = this._errorMessage) {
+  renderError(message = this.errorMessage) {
     const errorMarkup = `
       <div class="error">
         <div>
@@ -91,11 +91,11 @@ export default class ParentView {
       </div>
     `;
 
-    this._clear();
-    this._parentEl.insertAdjacentHTML('afterbegin', errorMarkup);
+    this.clear();
+    this.parentEl.insertAdjacentHTML('afterbegin', errorMarkup);
   }
 
-  renderMessage(message = this._message) {
+  renderMessage(message = this.message) {
     const messageMarkup = `
       <div class="message">
           <div>
@@ -107,7 +107,7 @@ export default class ParentView {
         </div>
     `;
 
-    this._clear();
-    this._parentEl.insertAdjacentHTML('afterbegin', messageMarkup);
+    this.clear();
+    this.parentEl.insertAdjacentHTML('afterbegin', messageMarkup);
   }
 }

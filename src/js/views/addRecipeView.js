@@ -1,65 +1,65 @@
-/* eslint-disable no-underscore-dangle,class-methods-use-this,import/no-unresolved */
+// eslint-disable-next-line import/no-unresolved
 import icons from 'url:../../img/icons.svg';
 import ParentView from './parentView';
 import { wait } from '../helpers';
 import { CLOSE_WINDOW_DELAY, RESTORE_FORM_DELAY } from '../config';
 
 class AddRecipeView extends ParentView {
-  _parentEl = document.querySelector('.upload');
+  parentEl = document.querySelector('.upload');
 
-  _addRecipeWindowEl = document.querySelector('.add-recipe-window');
+  addRecipeWindowEl = document.querySelector('.add-recipe-window');
 
-  _overlay = document.querySelector('.overlay');
+  overlay = document.querySelector('.overlay');
 
-  _openAddRecipeBtnEl = document.querySelector('.nav__add--bookmark');
+  openAddRecipeBtnEl = document.querySelector('.nav__add--bookmark');
 
-  _closeAddRecipeBtnEl = document.querySelector('.btn--close-modal');
+  closeAddRecipeBtnEl = document.querySelector('.btn--close-modal');
 
-  _message = 'Your recipe has been successfully uploaded. Enjoy!';
+  message = 'Your recipe has been successfully uploaded. Enjoy!';
 
   constructor() {
     super();
     // eslint-disable-next-line no-underscore-dangle
-    this._addHandlerShowAddRecipeWindow();
-    this._addHandlerCloseAddRecipeWindow();
+    this.addHandlerShowAddRecipeWindow();
+    this.addHandlerCloseAddRecipeWindow();
   }
 
   // Public method for opening or closing the modal
-  _controlModal() {
-    this._overlay.classList.toggle('hidden');
-    this._addRecipeWindowEl.classList.toggle('hidden');
+  controlModal() {
+    this.overlay.classList.toggle('hidden');
+    this.addRecipeWindowEl.classList.toggle('hidden');
   }
 
   // Private method for closing the modal by Escape
-  _closeModalByEscape(e) {
+  closeModalByEscape(e) {
     if (e.key === 'Escape') {
-      this._overlay.classList.add('hidden');
-      this._addRecipeWindowEl.classList.add('hidden');
+      this.overlay.classList.add('hidden');
+      this.addRecipeWindowEl.classList.add('hidden');
     }
   }
 
-  _addHandlerShowAddRecipeWindow() {
-    this._openAddRecipeBtnEl.addEventListener(
+  addHandlerShowAddRecipeWindow() {
+    this.openAddRecipeBtnEl.addEventListener(
       'click',
-      this._controlModal.bind(this)
+      this.controlModal.bind(this)
     );
   }
 
-  _addHandlerCloseAddRecipeWindow() {
+  addHandlerCloseAddRecipeWindow() {
     // Event listener for closing the Modal Window by Close button
-    this._closeAddRecipeBtnEl.addEventListener(
+    this.closeAddRecipeBtnEl.addEventListener(
       'click',
-      this._controlModal.bind(this)
+      this.controlModal.bind(this)
     );
     // Event listener for closing the Modal Window by clicking on the Overlay
-    this._overlay.addEventListener('click', this._controlModal.bind(this));
+    this.overlay.addEventListener('click', this.controlModal.bind(this));
 
     // Event listener for closing the Modal Window by Escape
-    document.addEventListener('keydown', this._closeModalByEscape.bind(this));
+    document.addEventListener('keydown', this.closeModalByEscape.bind(this));
   }
 
   addHandlerUploadBtn(handler) {
-    this._parentEl.addEventListener('submit', function (e) {
+    this.parentEl.addEventListener('submit', function (e) {
       e.preventDefault();
 
       const dataArray = [...new FormData(this)];
@@ -72,17 +72,17 @@ class AddRecipeView extends ParentView {
   // A public method that is called by the Controller to close the success message and then restore the Add New Recipe Form in the Modal
   closeAddRecipeForm() {
     wait(CLOSE_WINDOW_DELAY)
-      .then(() => this._controlModal())
+      .then(() => this.controlModal())
       .then(() => wait(RESTORE_FORM_DELAY))
       .then(() => {
-        const markup = this._generateMarkup();
-        this._parentEl.innerHTML = '';
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
+        const markup = AddRecipeView.generateMarkup();
+        this.parentEl.innerHTML = '';
+        this.parentEl.insertAdjacentHTML('afterbegin', markup);
       });
   }
 
   //  A private method that generates the Add New Recipe Form Markup
-  _generateMarkup() {
+  static generateMarkup() {
     const markup = `
       <div class="upload__column">
         <h3 class="upload__heading">Recipe data</h3>

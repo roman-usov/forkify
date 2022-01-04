@@ -1,25 +1,27 @@
-/* eslint-disable import/no-unresolved,class-methods-use-this,no-underscore-dangle */
 import fracty from 'fracty';
+// eslint-disable-next-line import/no-unresolved
 import icons from 'url:../../img/icons.svg'; // Parcel 2
 import ParentView from './parentView';
 
-class ViewRecipe extends ParentView {
+export default class ViewRecipe extends ParentView {
+  data;
+
   //  The parent element to house recipe-related elements in the DOM
-  _parentEl = document.querySelector('.recipe');
+  parentEl = document.querySelector('.recipe');
 
   //  Default error message
-  _errorMessage = "Specified recipe doesn't exist. Please, try another one.";
+  errorMessage = "Specified recipe doesn't exist. Please, try another one.";
 
-  _message = 'Start by searching for a recipe or an ingredient. Have fun!';
+  message = 'Start by searching for a recipe or an ingredient. Have fun!';
 
   //  Publisher method for a recipe render subscriber function
-  addHandlerForRender(handler) {
+  static addHandlerForRender(handler) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
   //  Publisher method for rendering a recipe with updated servings
   addHandlerForServings(handler) {
-    this._parentEl.addEventListener('click', e => {
+    this.parentEl.addEventListener('click', e => {
       const btn = e.target.closest('.btn--update-servings');
       if (!btn) return;
 
@@ -30,7 +32,7 @@ class ViewRecipe extends ParentView {
   }
 
   addHandlerForBookmark(handler) {
-    this._parentEl.addEventListener('click', e => {
+    this.parentEl.addEventListener('click', e => {
       const btn = e.target.closest('.btn--bookmark');
       if (!btn) return;
 
@@ -39,14 +41,14 @@ class ViewRecipe extends ParentView {
   }
 
   //  Reduce with a callback
-  _generateIngredientsMarkup() {
-    return this._data.ingredients.reduce(
-      this._generateIngredientPreview.bind(this),
+  generateIngredientsMarkup() {
+    return this.data.ingredients.reduce(
+      ViewRecipe.generateIngredientPreview.bind(this),
       ''
     );
   }
 
-  _generateIngredientPreview(str, ingredient) {
+  static generateIngredientPreview(str, ingredient) {
     return `
       ${str}<li class="recipe__ingredient">
         <svg class="recipe__icon">
@@ -65,15 +67,15 @@ class ViewRecipe extends ParentView {
    `;
   }
 
-  // A private method to provide a complete recipe html element as a string based on the provided recipe object saved in #data
-  _generateMarkup() {
+  // A private method to provide a complete recipe html element as a string based on the provided recipe object saved in data
+  generateMarkup() {
     return `
     <figure class="recipe__fig">
-      <img src="${this._data.image}" alt="${
-      this._data.title
+      <img src="${this.data.image}" alt="${
+      this.data.title
     }" class="recipe__img" />
       <h1 class="recipe__title">
-        <span>${this._data.title}</span>
+        <span>${this.data.title}</span>
       </h1>
     </figure>
 
@@ -83,7 +85,7 @@ class ViewRecipe extends ParentView {
           <use href="${icons}#icon-clock"></use>
         </svg>
         <span class="recipe__info-data recipe__info-data--minutes">${
-          this._data.cookingTime
+          this.data.cookingTime
         }</span>
         <span class="recipe__info-text">minutes</span>
       </div>
@@ -92,20 +94,20 @@ class ViewRecipe extends ParentView {
           <use href="${icons}#icon-users"></use>
         </svg>
         <span class="recipe__info-data recipe__info-data--people">${
-          this._data.servings
+          this.data.servings
         }</span>
         <span class="recipe__info-text">servings</span>
 
         <div class="recipe__info-buttons">
           <button data-servings="minus" class="btn--tiny btn--update-servings" data-updated-servings="${
-            +this._data.servings - 1
+            +this.data.servings - 1
           }">
             <svg>
               <use href="${icons}#icon-minus-circle"></use>
             </svg>
           </button>
           <button data-servings="plus" class="btn--tiny btn--update-servings" data-updated-servings="${
-            +this._data.servings + 1
+            +this.data.servings + 1
           }">
             <svg>
               <use href="${icons}#icon-plus-circle"></use>
@@ -114,7 +116,7 @@ class ViewRecipe extends ParentView {
         </div>
       </div>
 
-      <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
+      <div class="recipe__user-generated ${this.data.key ? '' : 'hidden'}">
         <svg>
           <use href="${icons}#icon-user"></use>
         </svg>
@@ -122,7 +124,7 @@ class ViewRecipe extends ParentView {
       <button class="btn--round btn--bookmark">
         <svg class="">
           <use href="${icons}#icon-bookmark${
-      this._data.bookmarked ? '-fill' : ''
+      this.data.bookmarked ? '-fill' : ''
     }"></use>
         </svg>
       </button>
@@ -131,7 +133,7 @@ class ViewRecipe extends ParentView {
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
       <ul class="recipe__ingredient-list">
-        ${this._generateIngredientsMarkup()}
+        ${this.generateIngredientsMarkup()}
       </ul>
     </div>
 
@@ -140,13 +142,13 @@ class ViewRecipe extends ParentView {
       <p class="recipe__directions-text">
         This recipe was carefully designed and tested by
         <span class="recipe__publisher">${
-          this._data.publisher
+          this.data.publisher
         }</span>. Please check out
         directions at their website.
       </p>
       <a
         class="btn--small recipe__btn"
-        href="${this._data.sourceUrl}"
+        href="${this.data.sourceUrl}"
         target="_blank"
       >
         <span>Directions</span>
@@ -158,5 +160,3 @@ class ViewRecipe extends ParentView {
   `;
   }
 }
-
-export default new ViewRecipe();
