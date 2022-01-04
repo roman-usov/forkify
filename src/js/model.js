@@ -71,8 +71,6 @@ export const updateServings = function (newServings) {
     const updatedIngredient = ingredient;
     if (!ingredient.quantity) return ingredient;
 
-    //  const quantityPerServing = ingredient.quantity / state.recipe.servings;
-
     updatedIngredient.quantity = round(
       (updatedIngredient.quantity / state.recipe.servings) * newServings,
       STEP

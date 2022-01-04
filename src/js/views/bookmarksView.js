@@ -1,7 +1,7 @@
 import ParentView from './parentView';
 import PreviewView from './previewView'; // Parcel 2
 
-class BookmarksView extends ParentView {
+export default class BookmarksView extends ParentView {
   // Parent element for bookmarks
   parentEl = document.querySelector('.bookmarks__list');
 
@@ -9,8 +9,7 @@ class BookmarksView extends ParentView {
 
   message = '';
 
-  // eslint-disable-next-line class-methods-use-this
-  addHandlerRenderBookmarksOnLoad(handler) {
+  static addHandlerRenderBookmarksOnLoad(handler) {
     window.addEventListener('load', handler);
   }
 
@@ -22,5 +21,3 @@ class BookmarksView extends ParentView {
     );
   }
 }
-
-export default new BookmarksView();

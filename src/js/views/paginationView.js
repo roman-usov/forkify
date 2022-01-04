@@ -8,7 +8,6 @@ class PaginationView extends ParentView {
   addHandlerForPagination(handler) {
     this.parentEl.addEventListener('click', e => {
       e.preventDefault();
-      //  const page = +e.target.closest('.btn--inline').innerText.slice(-1); //searches for the closest up the DOM tree - handy because there may be inaccurate clicks (e.g. on a span)
       const btn = e.target.closest('.btn--inline');
       if (!btn) return;
       const pageToGoTo = +btn.dataset.goto;
@@ -24,20 +23,20 @@ class PaginationView extends ParentView {
     if (totalPages === 1) return '';
 
     // Case 2 - we are on page 1, and there are other pages
-    if (page === 1) return this.generateNextButton(page + 1);
+    if (page === 1) return PaginationView.generateNextButton(page + 1);
 
     // Case 3 - we are on the last page
     if (page === totalPages) {
-      return this.generatePrevButton(page - 1);
+      return PaginationView.generatePrevButton(page - 1);
     }
     // Case 4 - we are on a page between the first page and the last page
     return (
-      this.generatePrevButton(page - 1) + this.generateNextButton(page + 1)
+      PaginationView.generatePrevButton(page - 1) +
+      PaginationView.generateNextButton(page + 1)
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  generateNextButton(page) {
+  static generateNextButton(page) {
     return `
       <button data-goto='${page}' class="btn--inline pagination__btn--next">
         <span>Page ${page}</span>
@@ -48,8 +47,7 @@ class PaginationView extends ParentView {
     `;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  generatePrevButton(page) {
+  static generatePrevButton(page) {
     return `
       <button data-goto='${page}' class="btn--inline pagination__btn--prev">
         <svg class="search__icon">

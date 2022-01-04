@@ -3,7 +3,7 @@ import ViewRecipe from './views/recipeView';
 import searchBarView from './views/searchBarView';
 import searchResultsView from './views/searchResultsView';
 import paginationView from './views/paginationView';
-import bookmarksView from './views/bookmarksView';
+import BookmarksView from './views/bookmarksView';
 import addRecipeView from './views/addRecipeView';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
@@ -13,8 +13,9 @@ import 'regenerator-runtime/runtime';
 //   module.hot.accept();
 // }
 
-//  Instantiate an object out of the imported ViewRecipe class
+//  Instantiate objects out of View classes to use both static and public methods
 const recipeView = new ViewRecipe();
+const bookmarksView = new BookmarksView();
 
 const controlRecipes = async function () {
   try {
@@ -114,13 +115,8 @@ const controlAddRecipe = async function (newRecipe) {
     // Add the hash of the new recipe to the url
     window.history.pushState(null, '', `#${model.state.recipe.id}`);
 
-    // eslint-disable-next-line max-len
     // Close the Modal Window with the success message and restore the recipe form to its initial state
     addRecipeView.closeAddRecipeForm();
-
-    // setTimeout(() => {
-    //   addRecipeView.toggleModal();
-    // }, CLOSE_WINDOW_DELAY * 1000);
   } catch (error) {
     addRecipeView.renderError(error.message);
   }
@@ -128,7 +124,7 @@ const controlAddRecipe = async function (newRecipe) {
 
 const init = function () {
   // Add an event listener for rendering bookmarks upon loading the page
-  bookmarksView.addHandlerRenderBookmarksOnLoad(controlBookmarks);
+  BookmarksView.addHandlerRenderBookmarksOnLoad(controlBookmarks);
 
   // Add event handlers for hashchange and load events
   ViewRecipe.addHandlerForRender(controlRecipes);
@@ -142,7 +138,6 @@ const init = function () {
   // Add an event handler for the submit search query button
   searchBarView.addHandlerForSearch(controlSearchResults);
 
-  // eslint-disable-next-line max-len
   // Add an event listener for the pagination element to listen for future pagination button clicks via event propagation
   paginationView.addHandlerForPagination(controlPagination);
 
