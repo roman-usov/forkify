@@ -19,20 +19,20 @@ export default class ParentView {
    * @this {Object} ParentView instance object
    * @author Roman Usov
    */
-  // eslint-disable-next-line consistent-return
-  render(data, render = true) {
-    if (!data || (Array.isArray(data) && data.length === 0))
-      return this.renderError();
 
+  displayInDOM(markup) {
+    this.clear();
+    this.parentEl.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  render(data) {
     this.data = data;
 
-    const markup = this.generateMarkup();
-
-    if (!render) return markup;
-
-    this.clear();
-
-    this.parentEl.insertAdjacentHTML('afterbegin', markup);
+    if (!data || (Array.isArray(data) && data.length === 0)) {
+      this.renderError();
+    } else {
+      this.displayInDOM(this.generateMarkup());
+    }
   }
 
   // A public method to update an HTML element based on provided input
@@ -67,7 +67,7 @@ export default class ParentView {
 
   // A public method to render a spinner
   renderSpinner() {
-    const spinnerHtml = `
+    const spinnerMarkup = `
     <div class="spinner">
       <svg>
         <use href="${icons}#icon-loader"></use>
@@ -75,8 +75,7 @@ export default class ParentView {
     </div>
   `;
 
-    this.clear();
-    this.parentEl.insertAdjacentHTML('afterbegin', spinnerHtml);
+    this.displayInDOM(spinnerMarkup);
   }
 
   renderError(message = this.errorMessage) {
@@ -91,8 +90,7 @@ export default class ParentView {
       </div>
     `;
 
-    this.clear();
-    this.parentEl.insertAdjacentHTML('afterbegin', errorMarkup);
+    this.displayInDOM(errorMarkup);
   }
 
   renderMessage(message = this.message) {
@@ -107,7 +105,6 @@ export default class ParentView {
         </div>
     `;
 
-    this.clear();
-    this.parentEl.insertAdjacentHTML('afterbegin', messageMarkup);
+    this.displayInDOM(messageMarkup);
   }
 }

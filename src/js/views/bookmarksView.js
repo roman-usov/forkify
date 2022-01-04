@@ -1,5 +1,5 @@
 import ParentView from './parentView';
-import previewView from './previewView'; // Parcel 2
+import PreviewView from './previewView'; // Parcel 2
 
 class BookmarksView extends ParentView {
   // Parent element for bookmarks
@@ -16,7 +16,8 @@ class BookmarksView extends ParentView {
 
   generateMarkup() {
     return this.data.reduce(
-      (markup, recipeData) => markup + previewView.render(recipeData, false),
+      (markup, recipeData) =>
+        markup + PreviewView.generatePreviewMarkup(recipeData),
       ''
     );
   }

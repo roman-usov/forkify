@@ -1,5 +1,5 @@
 import ParentView from './parentView';
-import previewView from './previewView'; // Parcel 2
+import PreviewView from './previewView'; // Parcel 2
 
 class SearchResultsView extends ParentView {
   parentEl = document.querySelector('.results');
@@ -10,7 +10,8 @@ class SearchResultsView extends ParentView {
 
   generateMarkup() {
     return this.data.reduce(
-      (markup, recipeData) => markup + previewView.render(recipeData, false),
+      (markup, recipeData) =>
+        markup + PreviewView.generatePreviewMarkup(recipeData),
       ''
     );
   }

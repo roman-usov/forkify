@@ -2,23 +2,23 @@
 import icons from 'url:../../img/icons.svg';
 import ParentView from './parentView';
 
-class PreviewView extends ParentView {
-  generateMarkup() {
+export default class PreviewView extends ParentView {
+  static generatePreviewMarkup(recipeData) {
     const id = window.location.hash.slice(1);
 
     return `
       <li class="preview">
         <a class="preview__link ${
-          this.data.id === id ? 'preview__link--active' : ''
-        }"  href="#${this.data.id}">
+          recipeData.id === id ? 'preview__link--active' : ''
+        }"  href="#${recipeData.id}">
           <figure class="preview__fig">
-            <img src="${this.data.image}" alt="${this.data.title}" />
+            <img src="${recipeData.image}" alt="${recipeData.title}" />
           </figure>
           <div class="preview__data">
-            <h4 class="preview__title">${this.data.title}</h4>
-            <p class="preview__publisher">${this.data.publisher}</p>
+            <h4 class="preview__title">${recipeData.title}</h4>
+            <p class="preview__publisher">${recipeData.publisher}</p>
             <div class="preview__user-generated ${
-              this.data.key ? '' : 'hidden'
+              recipeData.key ? '' : 'hidden'
             }">
               <svg>
                 <use href="${icons}#icon-user"></use>
@@ -30,5 +30,3 @@ class PreviewView extends ParentView {
    `;
   }
 }
-
-export default new PreviewView();
