@@ -90,24 +90,23 @@ class AddRecipeView extends ParentView {
       <div class="upload__column">
         <h3 class="upload__heading">Recipe data</h3>
         <label>Title</label>
-        <input value="TEST" required name="title" type="text" />
+        <input required name="title" type="text" />
         <label>URL</label>
         <input value="https://gfreefoodie.com/gluten-free-lasagna-sheets-or-cut-pasta-gluten-free-pasta-recipe/" required name="sourceUrl" type="text" />
         <label>Image URL</label>
         <input value="https://images.unsplash.com/photo-1619895092538-128341789043?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80" required name="image" type="text" />
         <label>Publisher</label>
-        <input value="TEST" required name="publisher" type="text" />
+        <input required name="publisher" type="text" />
         <label>Prep time</label>
-        <input value="23" required name="cookingTime" type="number" />
+        <input required name="cookingTime" type="number" />
         <label>Servings</label>
-        <input value="4" required name="servings" type="number" />
+        <input required name="servings" type="number" />
       </div>
 
       <div class="upload__column">
         <h3 class="upload__heading">Ingredients</h3>
         <label>Ingredient 1</label>
         <input
-          value="0.5,kg,Rice"
           type="text"
           required
           name="ingredient-1"
@@ -115,14 +114,12 @@ class AddRecipeView extends ParentView {
         />
         <label>Ingredient 2</label>
         <input
-          value="1,,Avocado"
           type="text"
           name="ingredient-2"
           placeholder="Format: 'Quantity,Unit,Description'"
         />
         <label>Ingredient 3</label>
         <input
-          value=",,salt"
           type="text"
           name="ingredient-3"
           placeholder="Format: 'Quantity,Unit,Description'"
