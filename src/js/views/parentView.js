@@ -25,7 +25,6 @@ export default class ParentView {
     this.parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
-  // TODO
   render(data) {
     if (!data || data.length === 0) {
       this.renderError();

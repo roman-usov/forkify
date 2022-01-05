@@ -106,7 +106,6 @@ const controlAddRecipe = async function (newRecipe) {
 
     recipeView.render(model.state.recipe);
 
-    // TODO
     // Add the hash of the new recipe to the url
     window.history.pushState(null, '', `#${model.state.recipe.id}`);
 
